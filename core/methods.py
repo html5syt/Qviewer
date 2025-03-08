@@ -14,7 +14,7 @@ async def log(msg, page=ft.Page):
             )
             == "true"
         ):
-            page.open(ft.SnackBar(ft.Text(f"[Log-{datetime.datetime.now()}]{msg}"),duration=2**32))
+            page.open(ft.SnackBar(ft.Text(f"[Log-{datetime.datetime.now()}]{msg}"),duration=2**30))
 
 
 async def storage(

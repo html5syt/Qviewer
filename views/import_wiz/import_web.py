@@ -37,7 +37,7 @@ async def choose(data: fs.Datasy):
             )
             + json.value,
         )
-        await mt.log(f"Temporary storage json complete!", page=page)
+        # await mt.log(f"Temporary storage json complete!", page=page)
         
 
     json = ft.TextField(

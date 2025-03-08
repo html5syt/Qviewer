@@ -54,7 +54,7 @@ async def set_page(data: fs.Datasy):
                                             key="debug_mode",
                                             mode="r",
                                             type="c",
-                                        ),
+                                        ) if await mt.storage(page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c") else "false",
                                     ),
                                     ft.Button(
                                         "get data path",
