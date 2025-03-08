@@ -15,6 +15,15 @@ org = "tim"
 product = "Qviewer"
 company = "Tim"
 copyright = "Copyright (C) 2025 by Tim"
+build_number = "1"
+
+[tool.flet.app.boot_screen]
+show = true
+message = "首次启动时需要进行一些调整，请稍候..."
+
+[tool.flet.app.startup_screen]
+show = true
+message = "Qviewer 正在启动..."
 
 [tool.flet.android.signing]
 # store and key passwords can be passed with `--android-signing-key-store-password`
@@ -24,5 +33,3 @@ copyright = "Copyright (C) 2025 by Tim"
 key_store = "html5syt.jks" # --android-signing-key-store
 key_alias = "html5syt"
 
-[tool.flet.app]
-path = "src"
