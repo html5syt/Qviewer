@@ -28,7 +28,7 @@ async def set_page(data: fs.Datasy):
     async def handle_data_path(e):
         await mt.log(
             mt.GetEnv.get_app_data_path(), page=page,)
-    
+
     async def handle_temp_path(e):
         await mt.log(
             mt.GetEnv.get_app_temp_path(), page=page,)
@@ -48,21 +48,29 @@ async def set_page(data: fs.Datasy):
                                     ft.Switch(
                                         label="DEBUG MODE",
                                         on_change=debug_switch,
-                                        value=await mt.storage(
-                                            page=page,
-                                            sub_prefix="settings_",
-                                            key="debug_mode",
-                                            mode="r",
-                                            type="c",
-                                        ) if await mt.storage(page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c") else "false",
+                                        value=(
+                                            await mt.storage(
+                                                page=page,
+                                                sub_prefix="settings_",
+                                                key="debug_mode",
+                                                mode="r",
+                                                type="c",
+                                            )
+                                            if await mt.storage(
+                                                page=page,
+                                                sub_prefix="settings_",
+                                                key="debug_mode",
+                                                mode="s",
+                                                type="c",
+                                            )
+                                            else "false"
+                                        ),
                                     ),
                                     ft.Button(
-                                        "get data path",
-                                        on_click=handle_data_path
+                                        "get data path", on_click=handle_data_path
                                     ),
                                     ft.Button(
-                                        "get temp path",
-                                        on_click=handle_temp_path
+                                        "get temp path", on_click=handle_temp_path
                                     ),
                                 ],
                                 expand=True,
@@ -80,7 +88,7 @@ async def set_page(data: fs.Datasy):
                                             style=ft.ButtonStyle(
                                                 color=ft.Colors.BLUE,
                                                 bgcolor=ft.Colors.BLUE_50,
-                                                padding=ft.padding.all(26),
+                                                padding=ft.padding.all(15),
                                                 side=ft.BorderSide(
                                                     width=2, color=ft.Colors.BLUE_300
                                                 ),
@@ -93,7 +101,7 @@ async def set_page(data: fs.Datasy):
                                         #     style=ft.ButtonStyle(
                                         #         color=ft.Colors.BLUE,
                                         #         bgcolor=ft.Colors.BLUE_50,
-                                        #         padding=ft.padding.all(26),
+                                        #         padding=ft.padding.all(15),
                                         #         side=ft.BorderSide(
                                         #             width=2, color=ft.Colors.BLUE_300
                                         #         ),
@@ -104,7 +112,7 @@ async def set_page(data: fs.Datasy):
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),
                                 padding=ft.padding.only(
-                                    left=20, right=20, top=0, bottom=20
+                                    left=10, right=10, top=0, bottom=10
                                 ),
                             ),
                         ],

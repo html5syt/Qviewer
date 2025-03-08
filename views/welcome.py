@@ -12,7 +12,7 @@ async def welcome(data: fs.Datasy):
     page = data.page
 
     # 清空已导入的数据（初始化）
-    for key in ["json"]:
+    for key in ["json","dict","group"]:
         if await mt.storage(page, key, sub_prefix="import_file_", mode="s"):
             try:
                 (
@@ -21,7 +21,7 @@ async def welcome(data: fs.Datasy):
                     else None
                 )
             except:
-                pass
+                mt.log(f"清空已导入的数据失败：{key}")
 
     # 页面布局
     return ft.View(
@@ -62,10 +62,10 @@ async def welcome(data: fs.Datasy):
                                         ft.IconButton(
                                             icon=ft.Icons.SETTINGS,
                                             icon_size=28,
-                                              style=ft.ButtonStyle(
+                                            style=ft.ButtonStyle(
                                                 color=ft.Colors.BLUE,
                                                 bgcolor=ft.Colors.BLUE_50,
-                                                padding=ft.padding.all(26),
+                                                padding=ft.padding.all(15),
                                                 side=ft.BorderSide(
                                                     width=2, color=ft.Colors.BLUE_300
                                                 ),
@@ -78,7 +78,7 @@ async def welcome(data: fs.Datasy):
                                             style=ft.ButtonStyle(
                                                 color=ft.Colors.BLUE,
                                                 bgcolor=ft.Colors.BLUE_50,
-                                                padding=ft.padding.all(26),
+                                                padding=ft.padding.all(15),
                                                 side=ft.BorderSide(
                                                     width=2, color=ft.Colors.BLUE_300
                                                 ),
@@ -93,7 +93,7 @@ async def welcome(data: fs.Datasy):
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),
                                 padding=ft.padding.only(
-                                    left=20, right=20, top=0, bottom=20
+                                    left=10, right=10, top=0, bottom=10
                                 ),
                             ),
                         ],

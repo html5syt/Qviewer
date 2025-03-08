@@ -14,7 +14,37 @@ async def log(msg, page=ft.Page):
             )
             == "true"
         ):
-            page.open(ft.SnackBar(ft.Text(f"[Log-{datetime.datetime.now()}]{msg}"),duration=2**30))
+            page.open(
+                ft.SnackBar(
+                    ft.Column([ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")],scroll=ft.ScrollMode.AUTO),
+                    duration=2**30,
+                    dismiss_direction=ft.DismissDirection.END_TO_START,
+                )
+            )
+
+
+async def error(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
+    dialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Row(
+            [
+                ft.Icon(ft.Icons.ERROR, color=ft.Colors.RED),
+                ft.Text("错误", color=ft.Colors.RED),
+            ]
+        ),
+        content=ft.Text(message),
+        on_dismiss=on_close,
+    )
+
+    def on_close_default(e):
+        page.close(dialog)
+
+    dialog.actions = [
+        ft.TextButton("关闭", on_click=on_close or on_close_default),
+    ]
+    page.open(dialog)
+
+    return dialog
 
 
 async def storage(
@@ -25,6 +55,7 @@ async def storage(
     mode="r",
     prefix="qviewer_",
     sub_prefix="storage_",
+    force_out_to_log=False,
 ):
     """存储数据，默认使用 session 存储，模式为读取，前缀为 qviewer_
     Args:
@@ -55,7 +86,13 @@ async def storage(
                 return True
             else:
                 return False
-        await log(f"{key}值为: {page.session.get(key)}", page=page)
+        (
+            await log(f"{key}值为: {page.session.get(key)}", page=page)
+            if len(str(page.session.get(key))) <= 500 or force_out_to_log
+            else await log(
+                f"{key}值有: {len(str(page.session.get(key)))}个字符", page=page
+            )
+        )
     elif type == "c":
         if mode == "r":
             if await page.client_storage.contains_key_async(key):
@@ -70,7 +107,17 @@ async def storage(
                 page.client_storage.remove(key)
             else:
                 raise LookupError("Key not found in client storage")
-            await log(f"{key}值为: {page.session.get(key)}", page=page)
+            (
+                await log(
+                    f"{key}值为: {await page.client_storage.get_async(key)}", page=page
+                )
+                if len(str(await page.client_storage.get_async(key))) <= 500
+                or force_out_to_log
+                else await log(
+                    f"{key}值有: {len(str(await page.client_storage.get_async(key)))}个字符",
+                    page=page,
+                )
+            )
         elif mode == "s":
             if await page.client_storage.contains_key_async(key):
                 return True

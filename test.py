@@ -107,9 +107,19 @@ def main(page: ft.Page):
 
     def on_click(e):
         # nonlocal counter
-        page.open(ft.SnackBar(ft.Text(f"CounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounter\nCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounter value at")))
+        # page.open(ft.SnackBar(ft.Text(f"CounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounter\nCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounterCounter value at")))
         # counter += 1
         # page.update()
+        dialog = ft.AlertDialog(
+            modal=True,
+            content=ft.Row(
+                [
+                    ft.ProgressRing(),
+                    ft.Text("正在转换JSON为字典..."),
+                ]
+            ),
+        )
+        page.open(dialog)
 
     page.add(ft.ElevatedButton("Open SnackBar", on_click=on_click))
 

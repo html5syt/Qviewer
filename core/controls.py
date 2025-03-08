@@ -8,7 +8,9 @@ import asyncio
 class Base(ft.Container):
     def __init__(self, name=None, timestamp=0, avatar=None, **kwargs):
         super().__init__(**kwargs)
-        self.avatar = avatar or "default-avatar.png"
+        self.avatar = (
+            avatar or "https://q.qlogo.cn/headimg_dl?dst_uin=0&spec=640&img_type=jpg"
+        )
         self.name = name or "QQ用户"
         self.timestamp = datetime.fromtimestamp(timestamp + 8 * 60 * 60)
         # UTC+8
@@ -110,7 +112,10 @@ class TextMessage(Base):
             self.control.width = data.page.width*0.78
         # data.page.on_resized = self.on_resize(data)
         # data.page.run_task(self.on_resize, data)
-        super().__init__(**kwargs)
+        qqnum = 10001
+        super().__init__(
+            avatar=f"https://q.qlogo.cn/headimg_dl?dst_uin={qqnum}&spec=640&img_type=jpg"
+        )
     # async def on_resize(self, data: fs.Datasy):
     #     # mt.log("on_resize")
     #     while True:

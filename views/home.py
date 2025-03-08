@@ -60,30 +60,30 @@ def home(data: fs.Datasy):
             ),
         ],
     )
-    # mainview = ft.ListView(
-    #     expand=True,
-    #     spacing=10,
-    # )
-    mainview = ft.Text("Hello world")
+    mainview = ft.ListView(
+        expand=True,
+        spacing=10,
+    )
+    # mainview = ft.Text("Hello world")
     # #     border=ft.border.all(1, ft.Colors.RED),
     # # )
-    # for i in range(10):
-    #     # mainview.controls.append(ct.Base(timestamp=1738918858))
-    #     mainview.controls.append(
-    #         ct.TextMessage(
-    #             text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
-    #             timestamp=1738918858,
-    #             name=f"message{i}",
-    #             data=data,
-    #         )
-    #     )
-    #     mainview.controls.append(
-    #         ct.Base(
-    #             timestamp=1738918858,
-    #             name=f"base{i}",
-    #             data=data,
-    #         )
-    #     )
+    for i in range(10):
+        # mainview.controls.append(ct.Base(timestamp=1738918858))
+        mainview.controls.append(
+            ct.TextMessage(
+                text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
+                timestamp=1738918858,
+                name=f"message{i}",
+                data=data,
+            )
+        )
+        mainview.controls.append(
+            ct.Base(
+                timestamp=1738918858,
+                name=f"base{i}",
+                data=data,
+            )
+        )
     # page.add(mainview)
     # def fab_pressed(e):
     #     page.floating_action_button = None

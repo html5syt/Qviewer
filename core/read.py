@@ -8,8 +8,12 @@ import threading
 import sqlite3
 import os
 import tempfile
+import methods as mt
 
-class Read():
+# class Load():
+
+
+class Read_DB:
     def query_db_decrypted(self,db_path, query):
         """
         执行SQLite查询并将结果转换为字典列表，自动尝试用Protobuf解析字节类型字段
@@ -166,7 +170,6 @@ class Read():
 
         return new_data
 
-
     def process_byte_string(self,byte_str: bytes, lock: threading.Lock) -> str:
         """
         处理字节字符串，按照要求转换。
@@ -188,7 +191,6 @@ class Read():
         finally:
             pass
 
-
     def process_data_multithread(self,data: list, num_threads: int = 5) -> list:
         """
         使用多线程递归处理数据。
@@ -207,7 +209,6 @@ class Read():
                 results.append(future.result())
 
         return results
-
 
     def read_db(self):
         """

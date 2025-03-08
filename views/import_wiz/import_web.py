@@ -1,6 +1,7 @@
 import flet as ft
 import flet_easy as fs
 import core.methods as mt
+import json
 
 # welcome = fs.AddPagesy()
 
@@ -20,27 +21,120 @@ async def choose(data: fs.Datasy):
     # pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
     # page.overlay.extend([pick_files_dialog])
 
-    async def temporary_storage(e):
+    async def temporary_storage(e=ft.TapEvent):
+        """
+        如果存储中已有的JSON文本存在并且以用户新输入的内容结尾，则直接使用已有的JSON文本；否则将已有的JSON文本与用户新输入的内容拼接起来，然后写入存储。
+        """
+        # await mt.storage(
+        #     page=page,
+        #     sub_prefix="import_file_",
+        #     key="json",
+        #     mode="w",
+        #     value=(
+        #         str(
+        #             await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="r"
+        #             )
+        #             if await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="s"
+        #             )
+        #             else ""
+        #         )
+        #         + json_input.value
+        #         if str(
+        #             await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="r"
+        #             )
+        #             if await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="s"
+        #             )
+        #             else ""
+        #         ).endswith(json_input.value)
+        #         else str(
+        #             await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="r"
+        #             )
+        #             if await mt.storage(
+        #                 page=page, sub_prefix="import_file_", key="json", mode="s"
+        #             )
+        #             else ""
+        #         )
+        #     ),
+        # )
+        # 获取当前存储中的 JSON 数据
+        current_json = (
+            await mt.storage(page=page, sub_prefix="import_file_", key="json", mode="r")
+            if await mt.storage(
+                page=page, sub_prefix="import_file_", key="json", mode="s"
+            )
+            else ""
+        )
+
+        # 确定新的 JSON 数据
+        if current_json.endswith(json_input.value):
+            new_json = current_json
+        else:
+            new_json = current_json + json_input.value
+
         await mt.storage(
             page=page,
             sub_prefix="import_file_",
             key="json",
             mode="w",
-            value=str(
+            value=new_json,
+        )
+
+        # await mt.log(f"Temporary storage json complete!", page=page)
+
+    async def import_json(e):
+        # await mt.log(f"Importing json...", page=page)
+        # await mt.log(f"Temporary storage json: {await mt.storage(page=page, sub_prefix='import_file_', key='json', mode='r')}", page=page)
+        dialog = ft.AlertDialog(
+            modal=True,
+            content=ft.Row(
+                [
+                    ft.ProgressRing(),
+                    ft.Text("正在转换JSON为字典..."),
+                ]
+            ),
+        )
+        try:
+            await temporary_storage()
+            if (
                 await mt.storage(
-                    page=page, sub_prefix="import_file_", key="json", mode="r"
-                )
-                if await mt.storage(
                     page=page, sub_prefix="import_file_", key="json", mode="s"
                 )
-                else ""
-            )
-            + json.value,
-        )
-        # await mt.log(f"Temporary storage json complete!", page=page)
-        
+                and json_input.value
+                and await mt.storage(
+                    page=page, sub_prefix="import_file_", key="json", mode="r"
+                )
+            ):
+                page.open(dialog)
+                page.update()
+                json_data = json.loads(
+                    await mt.storage(
+                        page=page, sub_prefix="import_file_", key="json", mode="r"
+                    )
+                )
+                await mt.storage(
+                    page=page,
+                    mode="w",
+                    sub_prefix="import_file_",
+                    key="dict",
+                    value=json_data,
+                    force_out_to_log=True,
+                )
+            else:
+                raise ValueError("请先输入JSON文件内容！")
+        except Exception as err:
+            page.close(dialog) if dialog in page.overlay else None
+            await mt.error(f"JSON转换失败：{err}", page=page)
+        else:
+            page.close(dialog)
+            # await mt.log(f"JSON转换成功！", page=page)
+            page.update()
 
-    json = ft.TextField(
+    json_input = ft.TextField(
         label="复制JSON文件的所有内容到此处",
         hint_text="Tips：不建议一次性复制过多内容，否则可能造成卡顿\n长按上方备注栏可暂存当前输入的所有内容",
         multiline=True,
@@ -68,7 +162,7 @@ async def choose(data: fs.Datasy):
                                         ),
                                         on_long_press=temporary_storage,
                                     ),
-                                    json,
+                                    json_input,
                                 ],
                                 expand=True,
                                 alignment=ft.MainAxisAlignment.CENTER,
@@ -85,7 +179,7 @@ async def choose(data: fs.Datasy):
                                             style=ft.ButtonStyle(
                                                 color=ft.Colors.BLUE,
                                                 bgcolor=ft.Colors.BLUE_50,
-                                                padding=ft.padding.all(26),
+                                                padding=ft.padding.all(15),
                                                 side=ft.BorderSide(
                                                     width=2, color=ft.Colors.BLUE_300
                                                 ),
@@ -98,18 +192,18 @@ async def choose(data: fs.Datasy):
                                             style=ft.ButtonStyle(
                                                 color=ft.Colors.BLUE,
                                                 bgcolor=ft.Colors.BLUE_50,
-                                                padding=ft.padding.all(26),
+                                                padding=ft.padding.all(15),
                                                 side=ft.BorderSide(
                                                     width=2, color=ft.Colors.BLUE_300
                                                 ),
                                             ),
-                                            on_click=data.go("/import/choose"),
+                                            on_click=import_json,
                                         ),
                                     ],
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),
                                 padding=ft.padding.only(
-                                    left=20, right=20, top=0, bottom=20
+                                    left=10, right=10, top=0, bottom=10
                                 ),
                             ),
                         ],
