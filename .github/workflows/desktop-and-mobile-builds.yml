@@ -33,6 +33,9 @@ env:
   # Disables progress bars when using UV
   UV_NO_PROGRESS: 1
 
+  KEYSTORE_FILE: /home/runner/work/Qviewer/Qviewer/html5syt.jks
+
+  KEYSTORE_ALIAS: html5syt
 jobs:
   build-linux:
     runs-on: ubuntu-latest
