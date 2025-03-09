@@ -1,5 +1,5 @@
 # import asyncio
-import packages.flet_easy as fs
+import flet_easy as fs
 import flet as ft
 import core.methods as mt
 
@@ -27,15 +27,11 @@ async def set_page(data: fs.Datasy):
 
     async def handle_data_path(e):
         await mt.log(
-            mt.GetEnv.get_app_data_path(),
-            page=page,
-        )
+            mt.GetEnv.get_app_data_path(), page=page,)
 
     async def handle_temp_path(e):
         await mt.log(
-            mt.GetEnv.get_app_temp_path(),
-            page=page,
-        )
+            mt.GetEnv.get_app_temp_path(), page=page,)
 
     return ft.View(
         controls=[

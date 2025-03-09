@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import packages.flet_easy as fs
+import flet_easy as fs
 from core.config import ConfigApp
 
 # 导入view，用于注册路由
