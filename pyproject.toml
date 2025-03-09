@@ -33,3 +33,5 @@ message = "Qviewer 正在启动..."
 key_store = "html5syt.jks" # --android-signing-key-store
 key_alias = "html5syt"
 
+[tool.flet.android]
+split_per_abi = true

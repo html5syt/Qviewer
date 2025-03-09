@@ -17,7 +17,7 @@ async def log(msg, page=ft.Page):
             page.open(
                 ft.SnackBar(
                     ft.ListView([ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")]),
-                    duration=10000 if len(msg) <= 500 else 2**30,
+                    duration=10000 if len(msg if msg else "") <= 500 else 2**30,
                     dismiss_direction=ft.DismissDirection.END_TO_START,
                 )
             )
