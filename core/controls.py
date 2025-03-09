@@ -1,5 +1,5 @@
 import flet as ft
-import flet_easy as fs
+import packages.flet_easy as fs
 from datetime import datetime
 from . import methods as mt
 import asyncio
@@ -108,14 +108,15 @@ class TextMessage(Base):
             selectable=True,
             size=14,
         )
-        if len(self.text)*14 >= data.page.width/0.78:
-            self.control.width = data.page.width*0.78
+        if len(self.text) * 14 >= data.page.width / 0.78:
+            self.control.width = data.page.width * 0.78
         # data.page.on_resized = self.on_resize(data)
         # data.page.run_task(self.on_resize, data)
         qqnum = 10001
         super().__init__(
             avatar=f"https://q.qlogo.cn/headimg_dl?dst_uin={qqnum}&spec=640&img_type=jpg"
         )
+
     # async def on_resize(self, data: fs.Datasy):
     #     # mt.log("on_resize")
     #     while True:

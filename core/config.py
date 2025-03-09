@@ -1,5 +1,5 @@
 import flet as ft
-import flet_easy as fs
+import packages.flet_easy as fs
 
 
 class ConfigApp:

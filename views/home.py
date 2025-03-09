@@ -1,5 +1,5 @@
 import flet as ft
-import flet_easy as fs
+import packages.flet_easy as fs
 import core.controls as ct
 import core.methods as mt
 
@@ -46,8 +46,10 @@ def home(data: fs.Datasy):
         center_title=False,
         bgcolor=ft.Colors.BLUE,
         actions=[
-            ft.IconButton(ft.Icons.REFRESH, on_click=data.go("/blank"),tooltip="刷新布局"),
-            ft.IconButton(ft.Icons.SEARCH,tooltip="搜索"),
+            ft.IconButton(
+                ft.Icons.REFRESH, on_click=data.go("/blank"), tooltip="刷新布局"
+            ),
+            ft.IconButton(ft.Icons.SEARCH, tooltip="搜索"),
             ft.PopupMenuButton(
                 items=[
                     ft.PopupMenuItem(
@@ -88,8 +90,6 @@ def home(data: fs.Datasy):
     # def fab_pressed(e):
     #     page.floating_action_button = None
     #     data.go("/blank")
-
-
 
     # data.page.on_resized = on_resized
     return ft.View(

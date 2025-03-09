@@ -1,5 +1,5 @@
 import flet as ft
-import flet_easy as fs
+import packages.flet_easy as fs
 import core.methods as mt
 
 # welcome = fs.AddPagesy()
@@ -12,7 +12,7 @@ async def welcome(data: fs.Datasy):
     page = data.page
 
     # 清空已导入的数据（初始化）
-    for key in ["json","dict","group"]:
+    for key in ["json", "dict", "group"]:
         if await mt.storage(page, key, sub_prefix="import_file_", mode="s"):
             try:
                 (
