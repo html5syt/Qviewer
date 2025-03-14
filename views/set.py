@@ -1,5 +1,5 @@
 # import asyncio
-import flet_easy as fs
+import packages.flet_easy as fs
 import flet as ft
 import core.methods as mt
 
