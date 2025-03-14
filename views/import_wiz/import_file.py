@@ -16,7 +16,7 @@ async def choose(data: fs.Datasy):
 
     choose_button = ft.ElevatedButton(
         icon=ft.Icons.UPLOAD_FILE,
-        text=f"\n     点击此处选择文件     \n",
+        text=f"\n     Tap to choose file     \n",
         on_click=lambda _: pick_files_dialog.pick_files(
             # allow_multiple=True
             allowed_extensions=["json", "db", "qvw"]
@@ -48,7 +48,7 @@ async def choose(data: fs.Datasy):
                 content=ft.Row(
                     [
                         ft.ProgressRing(),
-                        ft.Text("正在转换JSON为字典..."),
+                        ft.Text("Converting JSON to dict..."),
                     ]
                 ),
             )
@@ -71,9 +71,9 @@ async def choose(data: fs.Datasy):
                         )
                 except Exception as err:
                     page.close(dialog)
-                    await mt.error(f"JSON转换失败：{err}", page=page)
+                    await mt.error(f"JSON convert error：{err}", page=page)
                 else:
-                    choose_button.text = "已选择：" + e.files[0].name
+                    choose_button.text = "choosed：" + e.files[0].name
                     next_step.disabled = False
                     next_step.style = ft.ButtonStyle(
                         color=ft.Colors.BLUE,
@@ -96,11 +96,11 @@ async def choose(data: fs.Datasy):
                             ft.Column(
                                 [
                                     ft.Text(
-                                        "选择文件",
+                                        "Choose a file to import",
                                         theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                                     ),
                                     ft.Text(
-                                        "支持的文件格式：\n①nt_msg.db文件 ②JSON文件 ③导出的预渲染文件",
+                                        "Supported file formats: \nJSON file",
                                         color=ft.Colors.GREY,
                                         text_align=ft.TextAlign.CENTER,
                                     ),

@@ -16,7 +16,7 @@ import views.import_wiz.import_file
 import views.import_wiz.import_web
 
 
-app = fs.FletEasy(route_init="/")
+app = fs.FletEasy(route_init="/import/choose")
 
 # We define the routes of the application.
 app.add_routes(

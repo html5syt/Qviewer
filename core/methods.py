@@ -5,16 +5,16 @@ from os import getenv, path
 
 async def log(msg, page=ft.Page):
     print(f"[Log-{datetime.datetime.now()}]{msg}")
-    if await storage(
-        page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c"
-    ):
-        if (
-            await storage(
-                page=page, sub_prefix="settings_", key="debug_mode", mode="r", type="c"
-            )
-            == "true"
-        ):
-            page.open(
+    # if await storage(
+    #     page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c"
+    # ):
+    #     if (
+    #         await storage(
+    #             page=page, sub_prefix="settings_", key="debug_mode", mode="r", type="c"
+    #         )
+    #         == "true"
+    #     ):
+    page.open(
                 ft.SnackBar(
                     ft.ListView([ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")]),
                     duration=10000 if len(msg if msg else "") <= 500 else 2**30,
