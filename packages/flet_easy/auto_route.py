@@ -3,7 +3,7 @@ from inspect import getmembers
 from os import listdir, path
 from typing import List
 
-from .pagesy import AddPagesy
+from pagesy import AddPagesy
 
 
 def automatic_routing(dir: str) -> List[AddPagesy]:

@@ -5,8 +5,8 @@ from typing import Any, Callable, Dict, List, Optional
 
 from flet import View
 
-from .datasy import Datasy
-from .extra import Redirect
+from datasy import Datasy
+from extra import Redirect
 
 MiddlewareHandler = Callable[[Datasy], Optional[Redirect]]
 Middleware = List[MiddlewareHandler]

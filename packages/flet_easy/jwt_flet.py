@@ -8,10 +8,10 @@ with contextlib.suppress(ImportError):
 with contextlib.suppress(ImportError):
     from rsa import newkeys
 
-from .datasy import Datasy, evaluate_secret_key
-from .exceptions import LoginError, LogoutError
-from .extra import Msg
-from .extrasJwt import _decode_payload
+from datasy import Datasy, evaluate_secret_key
+from exceptions import LoginError, LogoutError
+from extra import Msg
+from extrasJwt import _decode_payload
 
 
 class EasyKey:

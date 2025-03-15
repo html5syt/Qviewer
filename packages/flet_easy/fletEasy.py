@@ -1,4 +1,4 @@
-from .exceptions import AddPagesError, FletEasyError
+from exceptions import AddPagesError, FletEasyError
 
 try:
     from flet import AppView, Page, WebRenderer, app
@@ -15,13 +15,13 @@ from warnings import warn
 
 from flet import View
 
-from .auto_route import automatic_routing
-from .datasy import Datasy
-from .extra import Redirect
-from .extrasJwt import SecretKey
-from .inheritance import Viewsy
-from .pagesy import AddPagesy, Middleware, Pagesy
-from .route import FletEasyX
+from auto_route import automatic_routing
+from datasy import Datasy
+from extra import Redirect
+from extrasJwt import SecretKey
+from inheritance import Viewsy
+from pagesy import AddPagesy, Middleware, Pagesy
+from route import FletEasyX
 
 
 def page(

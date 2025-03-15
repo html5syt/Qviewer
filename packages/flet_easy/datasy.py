@@ -4,15 +4,15 @@ from typing import Any, Callable, Dict
 
 from flet import Page
 
-from .exceptions import LoginError
-from .extra import Msg, Redirect
-from .extrasJwt import (
+from exceptions import LoginError
+from extra import Msg, Redirect
+from extrasJwt import (
     SecretKey,
     _decode_payload,
     encode_verified,
 )
-from .inheritance import Keyboardsy, Resizesy, SessionStorageEdit, Viewsy
-from .job import Job
+from inheritance import Keyboardsy, Resizesy, SessionStorageEdit, Viewsy
+from job import Job
 
 
 class Datasy:

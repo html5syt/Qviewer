@@ -5,12 +5,12 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from flet import ControlEvent, KeyboardEvent, Page, RouteChangeEvent, View
 
-from .datasy import Datasy
-from .exceptions import LoginRequiredError, MidlewareError, RouteError
-from .extra import TYPE_PATTERNS, Msg, Redirect
-from .inheritance import Keyboardsy, Resizesy, Viewsy
-from .pagesy import Middleware, Pagesy
-from .view_404 import page_404_fs
+from datasy import Datasy
+from exceptions import LoginRequiredError, MidlewareError, RouteError
+from extra import TYPE_PATTERNS, Msg, Redirect
+from inheritance import Keyboardsy, Resizesy, Viewsy
+from pagesy import Middleware, Pagesy
+from view_404 import page_404_fs
 
 
 class FletEasyX:
