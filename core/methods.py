@@ -136,11 +136,11 @@ class GetEnv:
         except:
             raise ValueError(f"环境变量{name}不存在")
 
-    def get_app_data_path() -> str:
+    def get_app_data_path(self) -> str:
         """获取应用数据目录"""
         return getenv("FLET_APP_STORAGE_DATA")
 
-    def get_app_temp_path() -> str:
+    def get_app_temp_path(self) -> str:
         """获取本地应用数据目录"""
         return getenv("FLET_APP_STORAGE_TEMP")
 

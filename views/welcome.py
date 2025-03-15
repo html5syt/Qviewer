@@ -1,6 +1,11 @@
 import flet as ft
-import packages.flet_easy as fs
 import core.methods as mt
+import sys
+
+if sys.platform == "emscripten":
+    import packages.flet_easy as fs
+else:
+    import flet_easy as fs
 
 # welcome = fs.AddPagesy()
 
@@ -21,7 +26,7 @@ async def welcome(data: fs.Datasy):
                     else None
                 )
             except:
-                mt.log(f"清空已导入的数据失败：{key}")
+                await mt.log(f"清空已导入的数据失败：{key}")
 
     # 页面布局
     return ft.View(

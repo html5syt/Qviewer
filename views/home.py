@@ -1,8 +1,12 @@
 import flet as ft
-import packages.flet_easy as fs
-import core.controls as ct
-import core.methods as mt
 
+import core.controls as ct
+import sys
+
+if sys.platform == "emscripten":
+    import packages.flet_easy as fs
+else:
+    import flet_easy as fs
 
 # home = fs.AddPagesy(
 #     # route_prefix="/counter",

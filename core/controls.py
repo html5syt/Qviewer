@@ -1,9 +1,12 @@
-import flet as ft
-import packages.flet_easy as fs
 from datetime import datetime
-from . import methods as mt
-import asyncio
 
+import flet as ft
+import sys
+
+if sys.platform == "emscripten":
+    import packages.flet_easy as fs
+else:
+    import flet_easy as fs
 
 class Base(ft.Container):
     def __init__(self, name=None, timestamp=0, avatar=None, **kwargs):
