@@ -2,7 +2,7 @@ import flet as ft
 import flet_easy as fs
 import core.methods as mt
 import json
-import packages.aiofiles as aiofiles
+import aiofiles
 # TODO: Android上无法导入，待解决
 
 # welcome = fs.AddPagesy()
