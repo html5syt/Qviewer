@@ -31,11 +31,15 @@ async def set_page(data: fs.Datasy):
 
     async def handle_data_path(e):
         await mt.log(
-            mt.GetEnv.get_app_data_path(), page=page,)
+            mt.GetEnv.get_app_data_path(),
+            page=page,
+        )
 
     async def handle_temp_path(e):
         await mt.log(
-            mt.GetEnv.get_app_temp_path(), page=page,)
+            mt.GetEnv.get_app_temp_path(),
+            page=page,
+        )
 
     return ft.View(
         controls=[
@@ -47,6 +51,10 @@ async def set_page(data: fs.Datasy):
                                 [
                                     ft.Text(
                                         "TODO: 设置页面",
+                                        theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
+                                    ),
+                                    ft.Text(
+                                        f"on {sys.platform}",
                                         theme_style=ft.TextThemeStyle.DISPLAY_MEDIUM,
                                     ),
                                     ft.Switch(

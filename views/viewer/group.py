@@ -13,9 +13,8 @@ import core.methods as mt
 # @home.page(route="/", title="Home")
 def group(data: fs.Datasy, group_id: str):
     page = data.page
-    view = data.view
 
-    page.title = "Qviewer | 群: "+group_id
+    page.title = "Qviewer | 群: " + group_id
 
     drawer = ft.NavigationDrawer(
         controls=[
@@ -41,16 +40,16 @@ def group(data: fs.Datasy, group_id: str):
     appbar = ft.AppBar(
         leading=ft.IconButton(
             icon=ft.Icons.MENU,
-            icon_size=25,
+            icon_size=27,
             on_click=lambda _: page.open(drawer),
+            offset=ft.Offset(x=0.1, y=0),
         ),
         leading_width=30,
-        title=ft.Text(group_id, size=20),
+        title=ft.Text(group_id),
         center_title=False,
         bgcolor=ft.Colors.BLUE,
         actions=[
-            ft.IconButton(ft.Icons.REFRESH, on_click=data.go("/blank"),tooltip="刷新布局"),
-            ft.IconButton(ft.Icons.SEARCH,tooltip="搜索"),
+            ft.IconButton(ft.Icons.SEARCH, tooltip="搜索"),
             ft.PopupMenuButton(
                 items=[
                     ft.PopupMenuItem(
@@ -67,17 +66,23 @@ def group(data: fs.Datasy, group_id: str):
         expand=True,
         spacing=10,
     )
-    #     border=ft.border.all(1, ft.Colors.RED),
-    # )
+    # mainview = ft.Text("Hello world")
+    # #     border=ft.border.all(1, ft.Colors.RED),
+    # # )
     for i in range(10):
         # mainview.controls.append(ct.Base(timestamp=1738918858))
         mainview.controls.append(
-            ct.TextMessage(
-                text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
-                timestamp=1738918858,
-                name=f"message{i}",
-                data=data,
-            )
+            ft.Row(
+                alignment=ft.MainAxisAlignment.START,
+                controls=[
+                    ct.TextMessage(
+                        text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
+                        timestamp=1738918858,
+                        name=f"message{i}",
+                        data=data,
+                    )
+                ],
+            ),
         )
         mainview.controls.append(
             ct.Base(
@@ -90,8 +95,6 @@ def group(data: fs.Datasy, group_id: str):
     # def fab_pressed(e):
     #     page.floating_action_button = None
     #     data.go("/blank")
-
-
 
     # data.page.on_resized = on_resized
     return ft.View(

@@ -44,7 +44,7 @@ async def choose(data: fs.Datasy):
             padding=ft.padding.all(15),
             side=ft.BorderSide(width=2, color=ft.Colors.GREY_300),
         ),
-        # on_click=data.go("/import/choose"),
+        on_click=data.go("/home"),
         disabled=True,
     )
 
@@ -75,7 +75,7 @@ async def choose(data: fs.Datasy):
                             sub_prefix="import_file_",
                             key="dict",
                             value=json_data,
-                            force_out_to_log=True,
+                            force_out_to_log=False,
                         )
                 except Exception as err:
                     page.close(dialog)
