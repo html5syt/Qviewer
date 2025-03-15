@@ -6,7 +6,7 @@ from typing import Any, Dict
 from .exceptions import AlgorithmJwtError
 
 with contextlib.suppress(ImportError):
-    from jwt_flet import decode, encode
+    from jwt import decode, encode
 
 
 @dataclass

@@ -10,7 +10,6 @@ app = fs.FletEasy(route_init="/")
 # 导入view，用于注册路由
 import views.home
 import views.set
-import views.blank
 
 # 导入向导
 import views.viewer
@@ -42,7 +41,6 @@ app.add_routes(
             title="Qviewer | 导入向导-手动导入JSON",
         ),
         fs.Pagesy("/set", views.set.set_page, title="Qviewer | 设置"),
-        fs.Pagesy("/blank", views.blank.blank, title="空白页"),
         fs.Pagesy("/group/{group_id}", views.viewer.group.group),
     ]
 )
