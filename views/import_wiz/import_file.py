@@ -1,5 +1,5 @@
 import flet as ft
-import packages.flet_easy as fs
+import flet_easy as fs
 import core.methods as mt
 import json
 import packages.aiofiles as aiofiles

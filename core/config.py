@@ -1,9 +1,9 @@
 import flet as ft
-import packages.flet_easy as fs
+import flet_easy as fs
 
 
 class ConfigApp:
-    def __init__(self, app: fs.fletEasy):
+    def __init__(self, app: fs.FletEasy):
         self.app = app
         self.start()
 

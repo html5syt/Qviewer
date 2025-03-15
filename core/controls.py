@@ -1,5 +1,5 @@
 import flet as ft
-import packages.flet_easy as fs
+import flet_easy as fs
 from datetime import datetime
 from . import methods as mt
 import asyncio
