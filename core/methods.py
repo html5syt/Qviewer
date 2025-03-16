@@ -1,26 +1,44 @@
 import flet as ft
 import datetime
+import traceback
 from os import getenv, path
 
 
 async def log(msg, page=ft.Page):
     print(f"[Log-{datetime.datetime.now()}]{msg}")
-    if await storage(
-        page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c"
-    ):
-        if (
-            await storage(
-                page=page, sub_prefix="settings_", key="debug_mode", mode="r", type="c"
-            )
-            == "true"
+    try:
+        if await storage(
+            page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c"
         ):
-            page.open(
-                ft.SnackBar(
-                    ft.ListView([ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")]),
-                    duration=10000 if len(msg if msg else "") <= 500 else 2**30,
-                    dismiss_direction=ft.DismissDirection.END_TO_START,
+            if (
+                await storage(
+                    page=page,
+                    sub_prefix="settings_",
+                    key="debug_mode",
+                    mode="r",
+                    type="c",
                 )
-            )
+                == "true"
+            ):
+                try:
+                    if len(msg if msg else "") <= 500:
+                        page.open(
+                            ft.SnackBar(
+                                ft.ListView(
+                                    [ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")]
+                                ),
+                                duration=60000,
+                                dismiss_direction=ft.DismissDirection.END_TO_START,
+                            )
+                        )
+                    else:
+                        await info(f"[Log-{datetime.datetime.now()}]{msg}",page=page)
+                except:
+                    await info(f"[Log-{datetime.datetime.now()}]{msg}",page=page)
+    except Exception as e:
+        # print(f"[Error-{datetime.datetime.now()}]{traceback.format_exc()}")
+        # print(f"[Error-{datetime.datetime.now()}]页面可能未初始化")
+        pass
 
 
 async def error(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
@@ -32,7 +50,7 @@ async def error(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
                 ft.Text("错误", color=ft.Colors.RED),
             ]
         ),
-        content=ft.Text(message),
+        content=ft.Column([ft.Text(message)], scroll="auto"),
         on_dismiss=on_close,
     )
 
@@ -43,7 +61,27 @@ async def error(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
         ft.TextButton("关闭", on_click=on_close or on_close_default),
     ]
     page.open(dialog)
+    return dialog
+async def info(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
+    dialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Row(
+            [
+                ft.Icon(ft.Icons.INFO, color=ft.Colors.BLUE),
+                ft.Text("提示", color=ft.Colors.BLUE),
+            ]
+        ),
+        content=ft.Column([ft.Text(message)], scroll="auto"),
+        on_dismiss=on_close,
+    )
 
+    def on_close_default(e):
+        page.close(dialog)
+
+    dialog.actions = [
+        ft.TextButton("关闭", on_click=on_close or on_close_default),
+    ]
+    page.open(dialog)
     return dialog
 
 

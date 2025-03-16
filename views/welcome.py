@@ -18,11 +18,11 @@ async def welcome(data: fs.Datasy):
 
     # 清空已导入的数据（初始化）
     for key in ["json","dict","group"]:
-        if await mt.storage(page, key, sub_prefix="import_file_", mode="s"):
+        if await mt.storage(page, key, sub_prefix="import_file_", mode="s",type="s"):
             try:
                 (
-                    await mt.storage(page, key, "", sub_prefix="import_file_", mode="w")
-                    if await mt.storage(page, key, sub_prefix="import_file_")
+                    await mt.storage(page, key, "", sub_prefix="import_file_", mode="w",type="s")
+                    if await mt.storage(page, key, sub_prefix="import_file_",type="s")
                     else None
                 )
             except:

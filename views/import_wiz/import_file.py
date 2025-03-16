@@ -1,6 +1,7 @@
 import flet as ft
 import core.methods as mt
 import json
+import traceback
 import sys
 
 if sys.platform == "emscripten":
@@ -44,7 +45,7 @@ async def choose(data: fs.Datasy):
             padding=ft.padding.all(15),
             side=ft.BorderSide(width=2, color=ft.Colors.GREY_300),
         ),
-        on_click=data.go("/home"),
+        on_click=data.go("/"),
         disabled=True,
     )
 
@@ -76,10 +77,11 @@ async def choose(data: fs.Datasy):
                             key="dict",
                             value=json_data,
                             force_out_to_log=False,
+                            type="s"
                         )
                 except Exception as err:
                     page.close(dialog)
-                    await mt.error(f"JSON转换失败：{err}", page=page)
+                    await mt.error(f"JSON转换失败：{tracebak.format_exc()}", page=page)
                 else:
                     choose_button.text = "已选择：" + e.files[0].name
                     next_step.disabled = False

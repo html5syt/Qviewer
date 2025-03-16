@@ -1,6 +1,7 @@
 import flet as ft
 import core.methods as mt
 import json
+import traceback
 import sys
 
 if sys.platform == "emscripten":
@@ -67,9 +68,11 @@ async def choose(data: fs.Datasy):
         # )
         # 获取当前存储中的 JSON 数据
         current_json = (
-            await mt.storage(page=page, sub_prefix="import_file_", key="json", mode="r")
+            await mt.storage(
+                page=page, sub_prefix="import_file_", key="json", mode="r", type="s"
+            )
             if await mt.storage(
-                page=page, sub_prefix="import_file_", key="json", mode="s"
+                page=page, sub_prefix="import_file_", key="json", mode="s", type="s"
             )
             else ""
         )
@@ -86,6 +89,7 @@ async def choose(data: fs.Datasy):
             key="json",
             mode="w",
             value=new_json,
+            type="s",
         )
 
         # await mt.log(f"Temporary storage json complete!", page=page)
@@ -106,18 +110,22 @@ async def choose(data: fs.Datasy):
             await temporary_storage()
             if (
                 await mt.storage(
-                    page=page, sub_prefix="import_file_", key="json", mode="s"
+                    page=page, sub_prefix="import_file_", key="json", mode="s", type="s"
                 )
                 and json_input.value
                 and await mt.storage(
-                    page=page, sub_prefix="import_file_", key="json", mode="r"
+                    page=page, sub_prefix="import_file_", key="json", mode="r", type="s"
                 )
             ):
                 page.open(dialog)
                 page.update()
                 json_data = json.loads(
                     await mt.storage(
-                        page=page, sub_prefix="import_file_", key="json", mode="r"
+                        page=page,
+                        sub_prefix="import_file_",
+                        key="json",
+                        mode="r",
+                        type="s",
                     )
                 )
                 await mt.storage(
@@ -127,12 +135,13 @@ async def choose(data: fs.Datasy):
                     key="dict",
                     value=json_data,
                     force_out_to_log=True,
+                    type="s",
                 )
             else:
                 raise ValueError("请先输入JSON文件内容！")
         except Exception as err:
             page.close(dialog) if dialog in page.overlay else None
-            await mt.error(f"JSON转换失败：{err}", page=page)
+            await mt.error(f"JSON转换失败：{traceback.format_exc()}", page=page)
         else:
             page.close(dialog)
             # await mt.log(f"JSON转换成功！", page=page)

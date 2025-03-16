@@ -10,10 +10,13 @@ else:
 
 
 class Base(ft.Container):
-    def __init__(self, name=None, timestamp=0, avatar=None, **kwargs):
+    def __init__(self, name=None, timestamp=0, avatar=None, qqnum=None, **kwargs):
         super().__init__()
         self.avatar = (
-            avatar or "https://q.qlogo.cn/headimg_dl?dst_uin=0&spec=640&img_type=jpg"
+            avatar
+            or f"https://q.qlogo.cn/headimg_dl?dst_uin={qqnum}&spec=640&img_type=jpg"
+            if qqnum
+            else "https://q.qlogo.cn/headimg_dl?dst_uin=0&spec=640&img_type=jpg"
         )
         self.name = name or "QQ用户"
         self.timestamp = datetime.fromtimestamp(timestamp + 8 * 60 * 60)
@@ -68,7 +71,7 @@ class Base(ft.Container):
                             bgcolor=ft.Colors.BLUE_100,
                             expand=True,
                             expand_loose=True,
-                            margin=ft.margin.only(left=45)
+                            margin=ft.margin.only(left=45),
                         ),
                     ],
                 ),
@@ -111,8 +114,7 @@ class Base(ft.Container):
 
 
 class TextMessage(Base):
-    def __init__(self, text: str, data: fs.Datasy, **kwargs):
-        self.data = data
+    def __init__(self, text: str, qqnum=0, **kwargs):
         self.text = text
         self.control = ft.Text(
             self.text,
@@ -124,7 +126,6 @@ class TextMessage(Base):
         #     self.control.width = data.page.width*0.78
         # data.page.on_resized = self.on_resize(data)
         # data.page.run_task(self.on_resize, data)
-        qqnum = 10001
         super().__init__(
             avatar=f"https://q.qlogo.cn/headimg_dl?dst_uin={qqnum}&spec=640&img_type=jpg",
             **kwargs,

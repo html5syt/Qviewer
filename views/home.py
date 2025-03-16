@@ -1,6 +1,8 @@
 import flet as ft
-
+import core.methods as mt
 import core.controls as ct
+from core.load import *
+import traceback
 import sys
 
 if sys.platform == "emscripten":
@@ -15,30 +17,34 @@ else:
 
 # We add a second page
 # @home.page(route="/", title="Home")
-def home(data: fs.Datasy):
+async def home(data: fs.Datasy):
     page = data.page
 
-    
+    if await mt.storage(
+        page=page,
+        mode="s",
+        sub_prefix="import_file_",
+        key="dict",
+    ):
+        if await mt.storage(
+            page=page, mode="r", sub_prefix="import_file_", key="dict", type="s"
+        ):
+            await mt.log(page=page, msg="import_file_dict is not empty")
+            try:
+                await load_group(page=page)
+                await mt.log(
+                    page=page,
+                    msg=f"加载字典聊天数据成功\ngroup_list:{await mt.storage(page=page,mode='r',sub_prefix='group_',key='list')}",
+                )
+            except Exception as e:
+                await mt.error(
+                    page=page,
+                    message=f"加载字典聊天数据时出现问题: {traceback.format_exc()}",
+                )
 
     drawer = ft.NavigationDrawer(
         controls=[
             ft.Container(height=12),
-            # ft.NavigationDrawerDestination(
-            #     label="Item 1",
-            #     icon=ft.Icons.DOOR_BACK_DOOR_OUTLINED,
-            #     selected_icon=ft.Icon(ft.Icons.DOOR_BACK_DOOR),
-            # ),
-            # ft.Divider(thickness=2),
-            # ft.NavigationDrawerDestination(
-            #     icon=ft.Icon(ft.Icons.MAIL_OUTLINED),
-            #     label="Item 2",
-            #     selected_icon=ft.Icons.MAIL,
-            # ),
-            # ft.NavigationDrawerDestination(
-            #     icon=ft.Icon(ft.Icons.PHONE_OUTLINED),
-            #     label="Item 3",
-            #     selected_icon=ft.Icons.PHONE,
-            # ),
         ],
     )
     appbar = ft.AppBar(
@@ -46,20 +52,20 @@ def home(data: fs.Datasy):
             icon=ft.Icons.MENU,
             icon_size=27,
             on_click=lambda _: page.open(drawer),
-            offset=ft.Offset(x=0.1,y=0)
+            offset=ft.Offset(x=0.1, y=0),
         ),
         leading_width=30,
         title=ft.Text("首页"),
         center_title=False,
         bgcolor=ft.Colors.BLUE,
         actions=[
-            ft.IconButton(ft.Icons.SEARCH,tooltip="搜索"),
+            ft.IconButton(ft.Icons.SEARCH, tooltip="搜索"),
             ft.PopupMenuButton(
                 items=[
                     ft.PopupMenuItem(
                         text="导入向导(欢迎)", on_click=data.go("/welcome")
                     ),
-                    # ft.PopupMenuItem(),  # divider
+                    ft.PopupMenuItem(),  # divider
                     # ft.PopupMenuItem(text="Checked item",on_click=data.go("/blank")),
                 ],
                 tooltip="选项",
@@ -70,6 +76,9 @@ def home(data: fs.Datasy):
     #     expand=True,
     #     spacing=10,
     # )
+    if await mt.storage(page=page,mode='s',sub_prefix='group_',key='list'):
+        for group_id in await mt.storage(page=page,mode='r',sub_prefix='group_',key='list'):
+            appbar.actions[1].items.append(ft.PopupMenuItem(text=group_id, on_click=data.go(f"/group/{group_id}")))
     mainview = ft.Text("Hello world")
     #     border=ft.border.all(1, ft.Colors.RED),
     # )
@@ -96,13 +105,9 @@ def home(data: fs.Datasy):
     #         )
     #     )
     # page.add(mainview)
-    # def fab_pressed(e):
-    #     page.floating_action_button = None
-    #     data.go("/blank")
 
-    # data.page.on_resized = on_resized
     return ft.View(
-        controls=[mainview],
+        controls=[mainview, drawer],
         vertical_alignment="center",
         horizontal_alignment="center",
         appbar=appbar,

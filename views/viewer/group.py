@@ -11,7 +11,7 @@ import core.methods as mt
 
 # We add a second page
 # @home.page(route="/", title="Home")
-def group(data: fs.Datasy, group_id: str):
+async def group(data: fs.Datasy, group_id: str):
     page = data.page
 
     page.title = "Qviewer | 群: " + group_id
@@ -69,28 +69,36 @@ def group(data: fs.Datasy, group_id: str):
     # mainview = ft.Text("Hello world")
     # #     border=ft.border.all(1, ft.Colors.RED),
     # # )
-    for i in range(10):
-        # mainview.controls.append(ct.Base(timestamp=1738918858))
-        mainview.controls.append(
-            ft.Row(
-                alignment=ft.MainAxisAlignment.START,
-                controls=[
-                    ct.TextMessage(
-                        text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
-                        timestamp=1738918858,
-                        name=f"message{i}",
-                        data=data,
-                    )
-                ],
-            ),
-        )
-        mainview.controls.append(
-            ct.Base(
-                timestamp=1738918858,
-                name=f"base{i}",
-                data=data,
-            )
-        )
+    # for i in range(10):
+    #     # mainview.controls.append(ct.Base(timestamp=1738918858))
+    #     mainview.controls.append(
+    #         ft.Row(
+    #             alignment=ft.MainAxisAlignment.START,
+    #             controls=[
+    #                 ct.TextMessage(
+    #                     text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
+    #                     timestamp=1738918858,
+    #                     name=f"message{i}",
+    #                     data=data,
+    #                 )
+    #             ],
+    #         ),
+    #     )
+    #     mainview.controls.append(
+    #         ct.Base(
+    #             timestamp=1738918858,
+    #             name=f"base{i}",
+    #             data=data,
+    #         )
+    #     )
+    msg_ctrls=await mt.storage(
+        page=page,
+        mode="r",
+        sub_prefix="group_",
+        key="ctrls",
+    )
+    for ctrl in msg_ctrls[int(group_id)]:
+        mainview.controls.append(ctrl)
     # page.add(mainview)
     # def fab_pressed(e):
     #     page.floating_action_button = None
@@ -98,7 +106,7 @@ def group(data: fs.Datasy, group_id: str):
 
     # data.page.on_resized = on_resized
     return ft.View(
-        controls=[mainview],
+        controls=[mainview,drawer],
         vertical_alignment="center",
         horizontal_alignment="center",
         appbar=appbar,

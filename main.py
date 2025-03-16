@@ -1,5 +1,6 @@
 import sys
-from core.config import ConfigApp
+# from core.config import ConfigApp
+import flet as ft
 
 if sys.platform == "emscripten":
     import packages.flet_easy as fs
@@ -44,6 +45,26 @@ app.add_routes(
         fs.Pagesy("/group/{group_id}", views.viewer.group.group),
     ]
 )
+
+class ConfigApp:
+    def __init__(self, app: fs.FletEasy):
+        self.app = app
+        self.start()
+
+    def start(self):
+        @self.app.config
+        def page_config(page: ft.Page):
+            """页面通用设置"""
+            theme = ft.Theme()
+            platforms = ["android", "ios", "macos", "linux", "windows"]
+            for platform in platforms:
+                setattr(
+                    theme.page_transitions,
+                    platform,
+                    ft.PageTransitionTheme.CUPERTINO,
+                )
+            page.theme = theme
+
 # We load the application configuration.
 ConfigApp(app)
 
