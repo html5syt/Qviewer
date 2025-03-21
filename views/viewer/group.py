@@ -97,8 +97,7 @@ async def group(data: fs.Datasy, group_id: str):
         sub_prefix="group_",
         key="ctrls",
     )
-    for ctrl in msg_ctrls[int(group_id)]:
-        mainview.controls.append(ctrl)
+    mainview.controls = msg_ctrls[int(group_id)]
     # page.add(mainview)
     # def fab_pressed(e):
     #     page.floating_action_button = None

@@ -1,4 +1,5 @@
 import sys
+
 # from core.config import ConfigApp
 import flet as ft
 
@@ -17,6 +18,7 @@ import views.viewer
 import views.viewer.group
 import views.welcome
 import views.import_wiz.import_web
+
 if not sys.platform == "emscripten":
     import views.import_wiz.import_file
 
@@ -46,6 +48,7 @@ app.add_routes(
     ]
 )
 
+
 class ConfigApp:
     def __init__(self, app: fs.FletEasy):
         self.app = app
@@ -64,6 +67,7 @@ class ConfigApp:
                     ft.PageTransitionTheme.CUPERTINO,
                 )
             page.theme = theme
+
 
 # We load the application configuration.
 ConfigApp(app)

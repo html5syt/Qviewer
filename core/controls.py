@@ -2,6 +2,7 @@ from datetime import datetime
 
 import flet as ft
 import sys
+import asyncio
 
 if sys.platform == "emscripten":
     import packages.flet_easy as fs

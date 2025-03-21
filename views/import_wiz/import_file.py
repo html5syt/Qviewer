@@ -81,7 +81,7 @@ async def choose(data: fs.Datasy):
                         )
                 except Exception as err:
                     page.close(dialog)
-                    await mt.error(f"JSON转换失败：{tracebak.format_exc()}", page=page)
+                    await mt.error(f"JSON转换失败：{traceback.format_exc()}", page=page)
                 else:
                     choose_button.text = "已选择：" + e.files[0].name
                     next_step.disabled = False

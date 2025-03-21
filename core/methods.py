@@ -1,5 +1,6 @@
 import flet as ft
 import datetime
+import asyncio
 import traceback
 from os import getenv, path
 
@@ -7,10 +8,8 @@ from os import getenv, path
 async def log(msg, page=ft.Page):
     print(f"[Log-{datetime.datetime.now()}]{msg}")
     try:
-        if await storage(
-            page=page, sub_prefix="settings_", key="debug_mode", mode="s", type="c"
-        ):
-            if (
+
+        if (
                 await storage(
                     page=page,
                     sub_prefix="settings_",
@@ -20,9 +19,9 @@ async def log(msg, page=ft.Page):
                 )
                 == "true"
             ):
-                try:
-                    if len(msg if msg else "") <= 500:
-                        page.open(
+            try:
+                if len(msg if msg else "") <= 500:
+                    page.open(
                             ft.SnackBar(
                                 ft.ListView(
                                     [ft.Text(f"[Log-{datetime.datetime.now()}]{msg}")]
@@ -31,10 +30,10 @@ async def log(msg, page=ft.Page):
                                 dismiss_direction=ft.DismissDirection.END_TO_START,
                             )
                         )
-                    else:
-                        await info(f"[Log-{datetime.datetime.now()}]{msg}",page=page)
-                except:
-                    await info(f"[Log-{datetime.datetime.now()}]{msg}",page=page)
+                else:
+                    await info(f"[Log-{datetime.datetime.now()}]{msg}", page=page)
+            except:
+                await info(f"[Log-{datetime.datetime.now()}]{msg}", page=page)
     except Exception as e:
         # print(f"[Error-{datetime.datetime.now()}]{traceback.format_exc()}")
         # print(f"[Error-{datetime.datetime.now()}]页面可能未初始化")
@@ -62,6 +61,8 @@ async def error(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
     ]
     page.open(dialog)
     return dialog
+
+
 async def info(message: str, on_close=None, page=ft.Page) -> ft.AlertDialog:
     dialog = ft.AlertDialog(
         modal=True,
@@ -111,14 +112,14 @@ async def storage(
             if page.session.contains_key(key):
                 return page.session.get(key)
             else:
-                raise LookupError("Key not found in session storage")
+                return None
         elif mode == "w":
             page.session.set(key, value)
         elif mode == "d":
             if page.session.contains_key(key):
                 page.session.remove(key)
             else:
-                raise LookupError("Key not found in session storage")
+                return None
         elif mode == "s":
             if page.session.contains_key(key):
                 return True
@@ -188,3 +189,7 @@ def path_process(is_stroage: bool, filename: str) -> str:
         return path.join(GetEnv.get_app_data_path(), filename)
     else:
         return path.join(GetEnv.get_app_temp_path(), filename)
+
+
+def run_task(func):
+    return asyncio.get_running_loop().create_task(func)

@@ -134,7 +134,6 @@ async def choose(data: fs.Datasy):
                     sub_prefix="import_file_",
                     key="dict",
                     value=json_data,
-                    force_out_to_log=True,
                     type="s",
                 )
             else:
@@ -144,12 +143,13 @@ async def choose(data: fs.Datasy):
             await mt.error(f"JSON转换失败：{traceback.format_exc()}", page=page)
         else:
             page.close(dialog)
-            # await mt.log(f"JSON转换成功！", page=page)
+            await mt.log(f"JSON转换成功！", page=page)
             page.update()
+            data.page.go("/")
 
     json_input = ft.TextField(
         label="复制JSON文件的所有内容到此处",
-        hint_text="Tips：不建议一次性复制过多内容，否则可能造成卡顿\n长按上方备注栏可暂存当前输入的所有内容",
+        hint_text="Tips：不建议一次性复制过多内容，否则可能造成卡顿\n建议对JSON内容进行反格式化后输入以提高效率\n长按上方备注栏可暂存当前输入的所有内容",
         multiline=True,
         min_lines=5,
         max_lines=10,

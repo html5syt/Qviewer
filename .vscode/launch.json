@@ -10,13 +10,15 @@
             "request": "launch",
             "module": "flet.cli",
             "args": ["-d","-r","${fileDirname}\\${fileBasename}"]
+            
         },
         {
             "name": "启动flet本地开发",
             "type": "debugpy",
             "request": "launch",
             "module": "flet.cli",
-            "args": ["-d","${fileDirname}\\${fileBasename}"]
+            "args": ["-d","${fileDirname}\\${fileBasename}"],
+            
         },
         {
             "name": "启动flet开发服务器(递归)",
