@@ -4,10 +4,7 @@ import flet as ft
 import sys
 import asyncio
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
 
 
 class Base(ft.Container):

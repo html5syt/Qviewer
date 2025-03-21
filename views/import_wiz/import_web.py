@@ -4,10 +4,8 @@ import json
 import traceback
 import sys
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
+
 # welcome = fs.AddPagesy()
 
 

@@ -5,10 +5,7 @@ from core.load import *
 import traceback
 import sys
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
 
 # home = fs.AddPagesy(
 #     # route_prefix="/counter",

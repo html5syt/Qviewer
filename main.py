@@ -3,10 +3,8 @@ import sys
 # from core.config import ConfigApp
 import flet as ft
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
+
 app = fs.FletEasy(route_init="/")
 
 # 导入view，用于注册路由
