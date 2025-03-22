@@ -16,17 +16,12 @@ async def welcome(data: fs.Datasy):
     view = data.view
     page = data.page
 
-    # 清空已导入的数据（初始化）
-    for key in ["json","dict","group"]:
-        if await mt.storage(page, key, sub_prefix="import_file_", mode="s",type="s"):
-            try:
-                (
-                    await mt.storage(page, key, "", sub_prefix="import_file_", mode="w",type="s")
-                    if await mt.storage(page, key, sub_prefix="import_file_",type="s")
-                    else None
-                )
-            except:
-                await mt.log(f"清空已导入的数据失败：{key}")
+    # # 清空已导入的数据（初始化）
+    # for key in ["import_file_json","import_file_dict","group_list","group_msg_ctrls"]:
+    #     if await mt.storage(page, key, mode="s",type="s"):
+    #         try:await mt.storage(page, key, "", mode="w",type="s")
+    #         except:await mt.log(f"清空已导入的数据失败：{key}")
+    await mt.storage(page, mode="DEL", type="s")
 
     # 页面布局
     return ft.View(

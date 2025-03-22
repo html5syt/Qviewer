@@ -3,11 +3,34 @@ from datetime import datetime
 import flet as ft
 import sys
 import asyncio
+import time
 
 if sys.platform == "emscripten":
     import packages.flet_easy as fs
 else:
     import flet_easy as fs
+
+
+class Loading(ft.AlertDialog):
+    def __init__(self, modal=True, text=""):
+        super().__init__()
+        self.modal = modal
+        self.content = ft.Row(
+            [
+                ft.ProgressRing(),
+                ft.Text(text),
+            ]
+        )
+
+
+class ViewWithStartHandler(ft.View):
+    def __init__(self, start_handler, **kwargs):
+        super().__init__(**kwargs)
+        self.start_handler = start_handler
+
+    def did_mount(self):
+        super().did_mount()
+        self.start_handler
 
 
 class Base(ft.Container):

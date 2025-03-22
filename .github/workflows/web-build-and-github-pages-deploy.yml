@@ -69,6 +69,14 @@ jobs:
         name: web-build-artifact  # the name of the artifact
         path: build/web
 
+    - name: Deploy to netlify
+      uses: netlify/actions/cli@master
+      with:
+        args: deploy --dir=build/web --prod
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.DEV_NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
   deploy:
     needs: build  # wait for the "build" job to get done before executing this "deploy" job
 

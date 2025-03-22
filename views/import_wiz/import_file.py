@@ -1,5 +1,6 @@
 import flet as ft
 import core.methods as mt
+import core.controls as ct
 import json
 import traceback
 import sys
@@ -52,15 +53,7 @@ async def choose(data: fs.Datasy):
     async def pick_files_result(e: ft.FilePickerResultEvent):
         nonlocal choose_button
         if e.files[0].name.endswith(".json"):
-            dialog = ft.AlertDialog(
-                modal=True,
-                content=ft.Row(
-                    [
-                        ft.ProgressRing(),
-                        ft.Text("正在转换JSON为字典..."),
-                    ]
-                ),
-            )
+            dialog = ct.Loading(text="正在转换JSON为字典...")
             if e.files:
                 await mt.log(f"File picker result: {e}", page=page)
                 try:

@@ -98,8 +98,8 @@ async def storage(
     Args:
         key (str): 键
         value (_type_): 值
-        type (str, optional): c为持久缓存，s为session缓存，DEL为清空（仅用于调试！），默认c.
-        mode (str, optional): r为读取，w为写入，d为删除,s为查询是否存在，默认r.
+        type (str, optional): c为持久缓存，s为session缓存，，默认c.
+        mode (str, optional): r为读取，w为写入，d为删除,s为查询是否存在，DEL为清空（仅用于调试！）,默认r.
         prefix (str, optional): 前缀.
         sub_prefix (str, optional): 子前缀.
     """
@@ -123,6 +123,8 @@ async def storage(
                 return True
             else:
                 return False
+        elif mode == "DEL":
+            page.session.clear()
         (
             await log(f"{key}值为: {page.session.get(key)}", page=page)
             if len(str(page.session.get(key))) <= 500 or force_out_to_log
@@ -130,6 +132,7 @@ async def storage(
                 f"{key}值有: {len(str(page.session.get(key)))}个字符", page=page
             )
         )
+
     elif type == "c":
         if mode == "r":
             if await page.client_storage.contains_key_async(key):
@@ -160,9 +163,8 @@ async def storage(
                 return True
             else:
                 return False
-    elif type == "DEL":
-        await page.client_storage.clear_async()
-        page.session.clear()
+        elif mode == "DEL":
+            await page.client_storage.clear_async()
 
 
 class GetEnv:

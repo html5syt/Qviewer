@@ -1,5 +1,6 @@
 import flet as ft
 import core.methods as mt
+import core.controls as ct
 import json
 import traceback
 import sys
@@ -97,15 +98,7 @@ async def choose(data: fs.Datasy):
     async def import_json(e):
         # await mt.log(f"Importing json...", page=page)
         # await mt.log(f"Temporary storage json: {await mt.storage(page=page, sub_prefix='import_file_', key='json', mode='r')}", page=page)
-        dialog = ft.AlertDialog(
-            modal=True,
-            content=ft.Row(
-                [
-                    ft.ProgressRing(),
-                    ft.Text("正在转换JSON为字典..."),
-                ]
-            ),
-        )
+        dialog = ct.Loading(text="正在转换JSON为字典...")
         try:
             await temporary_storage()
             if (
