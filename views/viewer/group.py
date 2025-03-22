@@ -4,15 +4,17 @@ import core.controls as ct
 import core.methods as mt
 
 
-# home = fs.AddPagesy(
-#     # route_prefix="/counter",
-# )
-
-
-# We add a second page
-# @home.page(route="/", title="Home")
 async def group(data: fs.Datasy, group_id: str):
     page = data.page
+
+    async def navbar_click(e: ft.ControlEvent):
+        if e.data == "0":
+            data.page.go("/")
+        else:
+            list = await mt.storage(
+                page=page, mode="r", sub_prefix="group_", key="list"
+            )
+            data.page.go(f"/group/{list[int(e.data)-1]}") if list else None
 
     page.title = "Qviewer | 群: " + group_id
 
@@ -20,23 +22,15 @@ async def group(data: fs.Datasy, group_id: str):
         controls=[
             ft.Container(height=12),
             ft.NavigationDrawerDestination(
-                label="Item 1",
-                icon=ft.Icons.DOOR_BACK_DOOR_OUTLINED,
-                selected_icon=ft.Icon(ft.Icons.DOOR_BACK_DOOR),
+                label="首页",
+                icon=ft.Icons.HOME_OUTLINED,
+                selected_icon=ft.Icons.HOME_FILLED,
             ),
-            ft.Divider(thickness=2),
-            ft.NavigationDrawerDestination(
-                icon=ft.Icon(ft.Icons.MAIL_OUTLINED),
-                label="Item 2",
-                selected_icon=ft.Icons.MAIL,
-            ),
-            ft.NavigationDrawerDestination(
-                icon=ft.Icon(ft.Icons.PHONE_OUTLINED),
-                label="Item 3",
-                selected_icon=ft.Icons.PHONE,
-            ),
+            ft.Divider(),
         ],
+        on_change=navbar_click,
     )
+
     appbar = ft.AppBar(
         leading=ft.IconButton(
             icon=ft.Icons.MENU,
@@ -45,67 +39,65 @@ async def group(data: fs.Datasy, group_id: str):
             offset=ft.Offset(x=0.1, y=0),
         ),
         leading_width=30,
-        title=ft.Text(group_id),
+        title=ft.Text("群: " + group_id),
         center_title=False,
         bgcolor=ft.Colors.BLUE,
         actions=[
             ft.IconButton(ft.Icons.SEARCH, tooltip="搜索"),
             ft.PopupMenuButton(
                 items=[
-                    ft.PopupMenuItem(
-                        text="导入向导(欢迎)", on_click=data.go("/welcome")
-                    ),
-                    # ft.PopupMenuItem(),  # divider
-                    # ft.PopupMenuItem(text="Checked item",on_click=data.go("/blank")),
+                    ft.PopupMenuItem(text="导入向导", on_click=data.go("/welcome")),
                 ],
                 tooltip="选项",
             ),
         ],
     )
+    if await mt.storage(page=page, mode="s", sub_prefix="group_", key="list"):
+        for group_id_temp in await mt.storage(
+            page=page, mode="r", sub_prefix="group_", key="list"
+        ):
+            drawer.controls.append(
+                ft.NavigationDrawerDestination(
+                    label=group_id_temp,
+                )
+            )
+            if group_id_temp == int(group_id):
+
+                drawer.selected_index = len(drawer.controls) - 3
+            appbar.actions[1].items.append(
+                ft.PopupMenuItem(
+                    text=group_id_temp, on_click=data.go(f"/group/{group_id_temp}")
+                )
+            )
+        page.update()
+
     mainview = ft.ListView(
         expand=True,
         spacing=10,
+        auto_scroll=True,
     )
-    # mainview = ft.Text("Hello world")
-    # #     border=ft.border.all(1, ft.Colors.RED),
-    # # )
-    # for i in range(10):
-    #     # mainview.controls.append(ct.Base(timestamp=1738918858))
-    #     mainview.controls.append(
-    #         ft.Row(
-    #             alignment=ft.MainAxisAlignment.START,
-    #             controls=[
-    #                 ct.TextMessage(
-    #                     text="Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world\nHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world",
-    #                     timestamp=1738918858,
-    #                     name=f"message{i}",
-    #                     data=data,
-    #                 )
-    #             ],
-    #         ),
-    #     )
-    #     mainview.controls.append(
-    #         ct.Base(
-    #             timestamp=1738918858,
-    #             name=f"base{i}",
-    #             data=data,
-    #         )
-    #     )
-    msg_ctrls=await mt.storage(
+
+    msg_ctrls = await mt.storage(
         page=page,
         mode="r",
         sub_prefix="group_",
         key="ctrls",
     )
-    mainview.controls = msg_ctrls[int(group_id)]
-    # page.add(mainview)
-    # def fab_pressed(e):
-    #     page.floating_action_button = None
-    #     data.go("/blank")
+    # mainview.controls = msg_ctrls[int(group_id)]
+    async def load_progressly():
+        nonlocal mainview
+        for i,ctrls in enumerate(msg_ctrls[int(group_id)]):
+            mainview.controls.append(ctrls)
+            # send page to a page
+            if i % 500 == 0:
+                page.update()
+        # send the rest to a page
+        page.update()
+        mainview.auto_scroll=False
+    load_task=mt.run_task(load_progressly())
 
-    # data.page.on_resized = on_resized
     return ft.View(
-        controls=[mainview,drawer],
+        controls=[mainview],
         vertical_alignment="center",
         horizontal_alignment="center",
         appbar=appbar,

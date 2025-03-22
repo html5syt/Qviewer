@@ -35,8 +35,6 @@ async def log(msg, page=ft.Page):
             except:
                 await info(f"[Log-{datetime.datetime.now()}]{msg}", page=page)
     except Exception as e:
-        # print(f"[Error-{datetime.datetime.now()}]{traceback.format_exc()}")
-        # print(f"[Error-{datetime.datetime.now()}]页面可能未初始化")
         pass
 
 
