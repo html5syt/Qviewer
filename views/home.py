@@ -6,10 +6,7 @@ import traceback
 import sys
 import asyncio
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
 
 
 async def home(data: fs.Datasy):
@@ -163,7 +160,7 @@ async def home(data: fs.Datasy):
 #         group_list = await mt.storage(
 #             page=page, mode="r", sub_prefix="group_", key="list"
 #         )
-        
+
 #         # 生成所有需要添加的控件
 #         drawer_destinations = []
 #         popup_items = []
@@ -173,7 +170,7 @@ async def home(data: fs.Datasy):
 #             )
 #             popup_items.append(
 #                 ft.PopupMenuItem(
-#                     text=group_id, 
+#                     text=group_id,
 #                     on_click=data.go(f"/group/{group_id}")
 #                 )
 #             )
@@ -196,7 +193,7 @@ async def home(data: fs.Datasy):
 #             await safe_update()
 
 #             loop = asyncio.get_running_loop()
-            
+
 #             if sys.platform != "emscripten":
 #                 # 使用嵌套事件循环执行异步函数
 #                 from concurrent.futures import ThreadPoolExecutor

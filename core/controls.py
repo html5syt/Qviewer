@@ -5,10 +5,7 @@ import sys
 import asyncio
 import time
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
 
 
 class Loading(ft.AlertDialog):
