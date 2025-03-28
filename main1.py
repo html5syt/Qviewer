@@ -9,15 +9,15 @@ else:
     import flet_easy as fs
 app = fs.FletEasy(route_init="/")
 
-# 导入view，用于注册路由
-import views.home
-import views.set
+# # 导入view，用于注册路由
+# import views.home
+# import views.set
 
-# 导入向导
-import views.viewer
-import views.viewer.group
-import views.welcome
-import views.import_wiz.import_web
+# # 导入向导
+# import views.viewer
+# import views.viewer.group
+# import views.welcome
+# import views.import_wiz.import_web
 
 if not sys.platform == "emscripten":
     import views.import_wiz.import_file
