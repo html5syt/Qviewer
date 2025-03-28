@@ -110,7 +110,7 @@ async def group(data: fs.Datasy, group_id: str):
         start_handler=mt.run_task(load_message(group_id, page, mainview))
     )
 
-async def load_message(group_id, page, mainview):
+async def load_message(group_id, page: ft.Page, mainview):
     msg_ctrls = await mt.storage(
         page=page,
         mode="r",
@@ -121,7 +121,7 @@ async def load_message(group_id, page, mainview):
     async def load_progressly():
         nonlocal mainview
         group = msg_ctrls[int(group_id)]
-        batch_size = 1500  # 推荐初始值
+        batch_size = 500  # 推荐初始值
         total = len(group)
         
         for start in range(0, total, batch_size):
@@ -144,7 +144,7 @@ async def load_message(group_id, page, mainview):
             loop = asyncio.get_running_loop()
             executor = ThreadPoolExecutor()
             group = msg_ctrls[int(group_id)]
-            batch_size = 3000
+            batch_size = 2000
             
             # 生成批次索引
             batches = range(0, len(group), batch_size)

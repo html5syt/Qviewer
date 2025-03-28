@@ -86,6 +86,7 @@ async def home(data: fs.Datasy):
         start_handler=mt.run_task(load_msg(data, page, mainview, dialog, drawer, appbar))
     )
 
+# 方案0
 # async def load_msg(data, page:ft.Page, mainview, dialog, drawer, appbar):
 #     if await mt.storage(
 #         page=page, mode="r", sub_prefix="import_file_", key="dict", type="s"
@@ -144,6 +145,7 @@ async def home(data: fs.Datasy):
 #                 )
 #             )
 #             await page.update_async()
+# 方案1
 # async def load_msg(data:fs.Datasy, page: ft.Page, mainview, dialog, drawer, appbar):
 #     async def safe_update():
 #         """非阻塞安全更新页面"""
@@ -226,7 +228,7 @@ async def home(data: fs.Datasy):
 #         page.close(dialog)
 #         await safe_update()
 
-
+# 方案2
 async def load_msg(data:fs.Datasy, page: ft.Page, mainview, dialog, drawer, appbar):
     # 添加线程安全锁
     storage_lock = asyncio.Lock() if sys.platform != "emscripten" else None

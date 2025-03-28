@@ -27,6 +27,16 @@ async def set_page(data: fs.Datasy):
             type="c",
         )
         await mt.log(e, page=page)
+    async def dynamic_load_switch(e):
+        await mt.storage(
+            page=page,
+            sub_prefix="settings_",
+            key="dynamic_load",
+            value=e.data,
+            mode="w",
+            type="c",
+        )
+        await mt.log(e, page=page)
         # page.open(ft.SnackBar(ft.Text(f"Counter value at")))
 
     async def handle_data_path(e):
@@ -72,6 +82,27 @@ async def set_page(data: fs.Datasy):
                                                 page=page,
                                                 sub_prefix="settings_",
                                                 key="debug_mode",
+                                                mode="s",
+                                                type="c",
+                                            )
+                                            else "false"
+                                        ),
+                                    ),
+                                    ft.Switch(
+                                        label="动态加载",
+                                        on_change=dynamic_load_switch,
+                                        value=(
+                                            await mt.storage(
+                                                page=page,
+                                                sub_prefix="settings_",
+                                                key="dynamic_load",
+                                                mode="r",
+                                                type="c",
+                                            )
+                                            if await mt.storage(
+                                                page=page,
+                                                sub_prefix="settings_",
+                                                key="dynamic_load",
                                                 mode="s",
                                                 type="c",
                                             )
