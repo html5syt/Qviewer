@@ -7,8 +7,6 @@ requires-python = ">=3.9"
 license = "GNU Lesser General Public License v3.0 (LGPL-3.0)"
 dependencies = ["flet>=0.26.0", "flet-easy>=0.2.0", "aiofiles>=0.7.0"]
 
-[[project.authors]]
-name = "Tim"
 
 [tool.flet]
 org = "tim"
@@ -35,3 +33,6 @@ key_alias = "html5syt"
 
 [tool.flet.android]
 split_per_abi = true
+
+[tool.poetry]
+package-mode = false
