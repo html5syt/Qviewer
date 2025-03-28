@@ -73,4 +73,5 @@ app.add_routes(
 
 
 # We run the application
-app.run()
+# app.run()
+ft.app(app.get_app())
