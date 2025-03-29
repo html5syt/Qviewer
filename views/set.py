@@ -3,10 +3,7 @@ import flet as ft
 import core.methods as mt
 import sys
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-else:
-    import flet_easy as fs
+import flet_easy as fs
 
 # set = fs.AddPagesy()
 
@@ -138,19 +135,6 @@ async def set_page(data: fs.Datasy):
                                             ),
                                             on_click=data.go_back(),
                                         ),
-                                        # ft.IconButton(
-                                        #     icon=ft.Icons.KEYBOARD_ARROW_RIGHT,
-                                        #     icon_size=28,
-                                        #     style=ft.ButtonStyle(
-                                        #         color=ft.Colors.BLUE,
-                                        #         bgcolor=ft.Colors.BLUE_50,
-                                        #         padding=ft.padding.all(15),
-                                        #         side=ft.BorderSide(
-                                        #             width=2, color=ft.Colors.BLUE_300
-                                        #         ),
-                                        #     ),
-                                        #     on_click=data.go("/import/choose"),
-                                        # ),
                                     ],
                                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                 ),

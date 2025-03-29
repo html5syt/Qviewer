@@ -5,12 +5,8 @@ import json
 import traceback
 import sys
 
-if sys.platform == "emscripten":
-    import packages.flet_easy as fs
-    import packages.aiofiles as aiofiles
-else:
-    import flet_easy as fs
-    import aiofiles
+import flet_easy as fs
+import aiofiles
 
 
 # TODO: Android上无法导入，待解决
