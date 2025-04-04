@@ -4,20 +4,10 @@ import sys
 
 import flet_easy as fs
 
-# welcome = fs.AddPagesy()
-
-
-# We add a page
-# @welcome.page(route="/welcome", title="Qviewer | 欢迎")
 async def welcome(data: fs.Datasy):
-    view = data.view
+    # view = data.view
     page = data.page
 
-    # # 清空已导入的数据（初始化）
-    # for key in ["import_file_json","import_file_dict","group_list","group_msg_ctrls"]:
-    #     if await mt.storage(page, key, mode="s",type="s"):
-    #         try:await mt.storage(page, key, "", mode="w",type="s")
-    #         except:await mt.log(f"清空已导入的数据失败：{key}")
     await mt.storage(page, mode="DEL", type="s")
 
     # 页面布局
@@ -82,8 +72,6 @@ async def welcome(data: fs.Datasy):
                                             ),
                                             on_click=(
                                                 data.go("/import/choose")
-                                                if not page.web
-                                                else data.go("/import/import_web")
                                             ),
                                         ),
                                     ],
@@ -103,5 +91,4 @@ async def welcome(data: fs.Datasy):
         ],
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        # drawer=view.appbar,
     )

@@ -3,6 +3,7 @@ import sys
 
 import flet_easy as fs
 
+
 class ConfigApp:
     def __init__(self, app: fs.FletEasy):
         self.app = app
@@ -20,4 +21,9 @@ class ConfigApp:
                     platform,
                     ft.PageTransitionTheme.CUPERTINO,
                 )
+                page.fonts = {
+                    "WenKai": "LXGWWENKAI-REGULAR.TTF",
+                }
+
+                theme.font_family = "Wenkai"
             page.theme = theme

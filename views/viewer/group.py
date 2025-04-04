@@ -3,23 +3,32 @@ import flet_easy as fs
 import core.controls as ct
 import core.methods as mt
 import asyncio
-import sys
+
+
+
+class GroupState:
+    loading = False
+    loaded_count = 0
+    all_loaded = False
+    page_ready = False
 
 
 async def group(data: fs.Datasy, group_id: str):
     page = data.page
+    state = GroupState()
 
     async def navbar_click(e: ft.ControlEvent):
         if e.data == "0":
             data.page.go("/")
         else:
-            list = await mt.storage(
+            group_list = await mt.storage(
                 page=page, mode="r", sub_prefix="group_", key="list"
             )
-            data.page.go(f"/group/{list[int(e.data)-1]}") if list else None
+            data.page.go(f"/group/{group_list[int(e.data)-1]}") if group_list else None
 
     page.title = "Qviewer | 群: " + group_id
 
+    # 初始化UI组件
     drawer = ft.NavigationDrawer(
         controls=[
             ft.Container(height=12),
@@ -54,18 +63,16 @@ async def group(data: fs.Datasy, group_id: str):
             ),
         ],
     )
-    if await mt.storage(page=page, mode="s", sub_prefix="group_", key="list"):
-        for group_id_temp in await mt.storage(
-            page=page, mode="r", sub_prefix="group_", key="list"
-        ):
-            drawer.controls.append(
-                ft.NavigationDrawerDestination(
-                    label=group_id_temp,
-                )
-            )
-            if group_id_temp == int(group_id):
 
-                drawer.selected_index = len(drawer.controls) - 3
+    # 加载群组列表到导航栏
+    if await mt.storage(page=page, mode="s", sub_prefix="group_", key="list"):
+        group_list = await mt.storage(
+            page=page, mode="r", sub_prefix="group_", key="list"
+        )
+        for idx, group_id_temp in enumerate(group_list):
+            drawer.controls.append(ft.NavigationDrawerDestination(label=group_id_temp))
+            if group_id_temp == group_id:
+                drawer.selected_index = idx + 1  # +1因为前面有首页和分隔线
             appbar.actions[1].items.append(
                 ft.PopupMenuItem(
                     text=group_id_temp, on_click=data.go(f"/group/{group_id_temp}")
@@ -73,115 +80,73 @@ async def group(data: fs.Datasy, group_id: str):
             )
         page.update()
 
-    mainview = ft.ListView(
-        expand=True,
-        spacing=10,
-        auto_scroll=True,
-    )
+    # 主消息视图和进度条
+    progress_bar = ft.ProgressBar(visible=False)
+    mainview = ft.ListView(expand=True, spacing=10, reverse=True)
 
-    # msg_ctrls = await mt.storage(
-    #     page=page,
-    #     mode="r",
-    #     sub_prefix="group_",
-    #     key="ctrls",
-    # )
-    # # mainview.controls = msg_ctrls[int(group_id)]
-    # async def load_progressly():
-    #     nonlocal mainview
-    #     for i,ctrls in enumerate(msg_ctrls[int(group_id)]):
-    #         mainview.controls.append(ctrls)
-    #         # send page to a page
-    #         if i % 500 == 0:
-    #             page.update()
-    #     # send the rest to a page
-    #     page.update()
-    #     mainview.auto_scroll=False
-    # load_task=mt.run_task(load_progressly())
+    # 获取消息数据
+    msg_ctrls = await mt.storage(page=page, mode="r", sub_prefix="group_", key="ctrls")
+    group_msgs = msg_ctrls.get(group_id, []) if msg_ctrls else []
+    total_messages = len(group_msgs)
+    batch_size = 100
 
-    # await load_messang(group_id, page, mainview)
+    # 初始加载
+    initial_batch = group_msgs[:batch_size]
+    mainview.controls.extend(initial_batch)
+    state.loaded_count = len(initial_batch)
+    state.all_loaded = state.loaded_count >= total_messages
 
+    async def load_messages():
+        if state.loading or state.all_loaded or not state.page_ready:
+            return
+
+        state.loading = True
+        progress_bar.visible = True
+        progress_bar.value = 0
+        page.update()
+
+        current_batch = min(batch_size, total_messages - state.loaded_count)
+        for i in range(current_batch):
+            # 添加单条消息
+            mainview.controls.append(group_msgs[state.loaded_count + i])
+
+            # 更新进度条
+            progress_bar.value = (i + 1) / current_batch
+            if i % 10 == 0:  # 每10条更新一次UI以平衡性能
+                page.update()
+
+        state.loaded_count += current_batch
+        state.all_loaded = state.loaded_count >= total_messages
+
+        # 完成当前批次加载
+        progress_bar.visible = False
+        progress_bar.value = 0
+        page.update()
+        state.loading = False
+
+    def on_scroll(e: ft.OnScrollEvent):
+        if (
+            e.pixels <= 100
+            and not state.loading
+            and not state.all_loaded
+            and state.page_ready
+        ):
+            mt.run_task_ori(page.loop, load_messages())
+
+    mainview.on_scroll = on_scroll
+
+    # 页面布局
+    view = ft.Column([progress_bar, mainview], expand=True)
+
+    async def on_page_ready():
+        state.page_ready = True
+        page.update()
 
     return ct.ViewWithStartHandler(
-        controls=[mainview],
+        controls=[view],
         vertical_alignment="center",
         horizontal_alignment="center",
         appbar=appbar,
         drawer=drawer,
-        start_handler=mt.run_task(load_message(group_id, page, mainview))
+        start_handler=mt.run_task(on_page_ready()),
     )
-
-async def load_message(group_id, page: ft.Page, mainview):
-    msg_ctrls = await mt.storage(
-        page=page,
-        mode="r",
-        sub_prefix="group_",
-        key="ctrls",
-    )
-
-    async def load_progressly():
-        nonlocal mainview
-        group = msg_ctrls[int(group_id)]
-        batch_size = 500  # 推荐初始值
-        total = len(group)
-        
-        for start in range(0, total, batch_size):
-            # 批量扩展控件
-            mainview.controls.extend(group[start:start + batch_size])
-            
-            # 非阻塞更新并让出事件循环
-            await page.update_async()
-            if start % (batch_size * 3) == 0:  # 每3批次主动让出
-                await asyncio.sleep(0)
-        
-        # 最终设置
-        mainview.auto_scroll = False
-        await page.update_async()
-
-    if sys.platform != "emscripten":
-        from concurrent.futures import ThreadPoolExecutor
-
-        async def threaded_loader():
-            loop = asyncio.get_running_loop()
-            executor = ThreadPoolExecutor()
-            group = msg_ctrls[int(group_id)]
-            batch_size = 2000
-            
-            # 生成批次索引
-            batches = range(0, len(group), batch_size)
-            
-            # 并行处理数据分片
-            futures = [
-                loop.run_in_executor(
-                    executor,
-                    lambda s=start: group[s:s + batch_size]
-                ) for start in batches
-            ]
-            
-            # 异步获取并更新UI
-            for future in asyncio.as_completed(futures):
-                batch = await future
-                # 通过线程安全方式更新控件
-                def update_ui(batch):
-                    mainview.controls.extend(batch)
-                    page.update()
-                
-                # 将UI操作提交到主线程事件循环
-                await loop.run_in_executor(
-                    None, 
-                    lambda: loop.call_soon_threadsafe(
-                        lambda: update_ui(batch)
-                ))
-                
-                # 轻量级更新触发
-                try:await page.update_async()
-                except:pass
-            
-            # 最终设置
-            def final_update():
-                mainview.auto_scroll = False
-                page.update()
-            await loop.run_in_executor(None, final_update)
-
-        load_task = mt.run_task(threaded_loader())
-    else:
-        load_task = mt.run_task(load_progressly())

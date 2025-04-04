@@ -193,3 +193,44 @@ def path_process(is_stroage: bool, filename: str) -> str:
 
 def run_task(func):
     return asyncio.get_running_loop().create_task(func)
+
+from concurrent.futures import CancelledError
+def run_task_ori(
+        loop,
+        handler,
+        *args,
+        **kwargs,
+    ):
+        # assert asyncio.iscoroutinefunction(handler)
+
+        future = asyncio.run_coroutine_threadsafe(handler,loop)
+
+        def _on_completion(f):
+            try:
+                exception = f.exception()
+                if exception:
+                    raise exception
+            except CancelledError:
+                pass
+
+        future.add_done_callback(_on_completion)
+
+        return future
+def update_async(
+        page: ft.Page,
+    ):
+        # assert asyncio.iscoroutinefunction(handler)
+
+        future = asyncio.run_coroutine_threadsafe(page.update_async(),page.loop)
+
+        def _on_completion(f):
+            try:
+                exception = f.exception()
+                if exception:
+                    raise exception
+            except CancelledError:
+                pass
+
+        future.add_done_callback(_on_completion)
+
+        return future
